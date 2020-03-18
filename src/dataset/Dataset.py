@@ -1,5 +1,6 @@
-import numpy as np
 import random
+
+import numpy as np
 
 
 class Dataset:
@@ -36,10 +37,10 @@ class Dataset:
                 self.inter[u] = set([])
             self.inter[u].add(i)
 
-        print 'self.emb_image', self.emb_image.shape, \
+        print('self.emb_image', self.emb_image.shape, \
               'self.pos.size', len(self.pos), \
-              'self.neg.size', len(self.neg)
-        print 'size', (self.usz, self.isz)
+              'self.neg.size', len(self.neg))
+        print('size', (self.usz, self.isz))
 
     def shuffle(self):
         random.shuffle(self.pos)

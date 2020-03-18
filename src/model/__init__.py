@@ -1,2 +1,2 @@
-from VBPR import *
-from ModelFactory import *
+from .ModelFactory import *
+from .VBPR import *

@@ -9,9 +9,9 @@ class VBPR:
 
         self.regs = args.regs
         regs = eval(self.regs)
-        self.l1 = regs[0]
-        self.l2 = regs[1]
-        self.l3 = regs[2]
+        self.l1 = regs
+        self.l2 = regs
+        self.l3 = regs
         self.lmd = args.lmd
         self.adv = args.adv
         self.adv_type = args.adv_type
@@ -87,10 +87,10 @@ class VBPR:
         self.adv_loss = 0
         if self.adv:
             if self.adv_type == 'rand':
-                print 'random noise'
+                print('random noise')
                 self.delta = tf.truncated_normal(shape=self.image_feature.shape, mean=0.0, stddev=0.01)
             else:
-                print 'gradient noise'
+                print('gradient noise')
                 self.delta = tf.gradients(self.loss, [self.image_feature])[0]
             self.delta = tf.stop_gradient(self.delta)
 

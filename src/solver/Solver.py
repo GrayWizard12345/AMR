@@ -1,15 +1,18 @@
-import tensorflow as tf
-import numpy as np
-import time
-from dataset import Dataset
-from model import ModelFactory
 import math
+import time
+
+import numpy as np
+import tensorflow as tf
+
+from src.dataset import Dataset
+from src.model import ModelFactory
+
 
 class Solver:
     def __init__(self, args):
         self.dataset = Dataset(args)
         self.model = ModelFactory.newModel(args, self.dataset.usz, self.dataset.isz, self.dataset.fsz)
-        print 'model', self.model
+        print('model', self.model)
         self.epoch = args.epoch
         self.verbose = args.verbose
         self.adv = args.adv
@@ -33,7 +36,7 @@ class Solver:
                 feed_dict = dict(zip(api, generator.next()))
                 self.one_iteration(feed_dict)
             except Exception as e:
-                #print e.message
+                print(e)
                 break
 
 
@@ -74,14 +77,24 @@ class Solver:
         score10 = np.mean(map(self._score, zip(d,[10] * len(d))), 0)
         score20 = np.mean(map(self._score, zip(d, [20] * len(d))), 0)
 
-        print message, score5, score10, score20
-        print 'evaluation cost', time.time() - st
+        print(message, score5, score10, score20)
+        print('evaluation cost', time.time() - st)
 
     def load(self):
+
+        # save np.load
+        np_load_old = np.load
+
+        # modify the default parameters of np.load
+        np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
+
         params = np.load(self.weight_dir + 'best-vbpr.npy')
+
+        np.load = np_load_old
+
         self.sess.run([self.model.assign_P, self.model.assign_Q, self.model.phi.assign(params[2])],
             {self.model.init_emb_P: params[0], self.model.init_emb_Q: params[1]})
-        print 'load new parameters from best-vbpr.npy'
+        print('load new parameters from best-vbpr.npy')
 
 
     def save(self, step):
@@ -89,7 +102,7 @@ class Solver:
         params = self.sess.run(tf.trainable_variables())
         path = '%s%s-%d.npy'%(self.weight_dir,self.model.get_saver_name(),step)
         np.save(path, params)
-        print 'params are saved to ',path
+        print('params are saved to ', path)
         return
 
     def log(self):

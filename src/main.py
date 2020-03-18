@@ -1,9 +1,11 @@
 import argparse
-from solver import *
+
+from src.solver import *
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run RSGAN.")
-    parser.add_argument('--dataset', nargs='?', default='/home/dxy/PycharmProjects/VCycle/venv/data/pin_tiny',
+    parser.add_argument('--dataset', nargs='?', default='/home/hamlet/PycharmProjects/AMR/data/pinterest/',
                         help='dataset path')
     parser.add_argument('--model', nargs='?', default='AMR',
                         help='model: AIR, BPR, VBPR, DUIF, Cycle, CycleOri, POP, AMR')
@@ -19,15 +21,16 @@ def parse_args():
     parser.add_argument('--adv_type', nargs='?', default='grad', help='adversarial training type: grad, sign, rand')
     parser.add_argument('--cnn', nargs='?', default='resnet', help='cnn type: resnet, alexnet')
     parser.add_argument('--epsilon', type=float, default=2, help='epsilon for adversarial')
-    parser.add_argument('--weight_dir', nargs='?', default='./weights', help='directory to store the weights')
+    parser.add_argument('--weight_dir', nargs='?', default='/home/hamlet/PycharmProjects/AMR/weights',
+                        help='directory to store the weights')
 
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = parse_args()
-    print args
+    print(args)
 
-    print 'starting common Solver'
+    print('starting common Solver')
     s = Solver(args)
 
     s.train()
